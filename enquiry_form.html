@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Enquiry Form</title>
+  <style>
+    body {
+      font-family: Serpentine Medium, sans-serif; 
+      background-color: #faf7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background: #cef2f1;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+      font-size: 14px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      height: 90px;
+    }
+
+    /* Dealer Button Styles */
+    .dealer-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .dealer-btn {
+      flex: 1;
+      min-width: 80px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .dealer-btn:hover {
+      background-color: #e2e2e2;
+    }
+    .dealer-btn.active {
+      background-color: #007bff;
+      color: #ffffff;
+      border-color: #0056b3;
+    }
+
+    /* Product Button Styles (Multi Select) */
+    .product-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .product-btn {
+      padding: 8px 12px;
+      background-color: #f8f9fa;
+      color: #495057;
+      border: 1px solid #ced4da;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .product-btn:hover {
+      background-color: #e9ecef;
+    }
+    .product-btn.active {
+      background-color: #28a745;
+      color: #ffffff;
+      border-color: #1e7e34;
+      font-weight: bold;
+    }
+
+    /* Style for the new Web Component */
+    gmp-place-autocomplete {
+      width: 100%;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .submit-btn:disabled {
+      background-color: #8ed29f;
+    }
+    .status-msg {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+
+  <!-- Google Maps Bootstrap Dynamic Loader -->
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "AIzaSyDSu0H5bi4KRdLv6_OfwtwbwPL1TIjuK_k", // Replace with your key
+      v: "weekly"
+    });
+  </script>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>ICON EMBEDED CONTROLS</h2>
+    <h4>Customer Enquiry</h4>
+    <form id="enquiryForm">
+
+<!-- Dealer Selection Buttons -->
+      <div class="form-group">
+        <label>Select Dealer *</label>
+        <div class="dealer-options">
+          <button type="button" class="dealer-btn" data-value="IOCL">IOCL</button>
+          <button type="button" class="dealer-btn" data-value="BPCL">BPCL</button>
+          <button type="button" class="dealer-btn" data-value="HPCL">HPCL</button>
+          <button type="button" class="dealer-btn" data-value="MRPL">MRPL</button>
+        </div>
+      </div>
+
+      <!-- Product Selection Buttons (Multi-Select) -->
+      <div class="form-group">
+        <label>Select Products / Services * (Select multiple)</label>
+        <div class="product-options">
+          <button type="button" class="product-btn" data-value="N2">N2</button>
+          <button type="button" class="product-btn" data-value="AIR">AIR</button>
+          <button type="button" class="product-btn" data-value="ODU 2T">ODU 2T</button>
+          <button type="button" class="product-btn" data-value="ODU 4T">ODU 4T</button>
+          <button type="button" class="product-btn" data-value="AdBlue Dispenser">AdBlue Dispenser</button>
+          <button type="button" class="product-btn" data-value="Oil Changer">Oil Changer</button>
+          <button type="button" class="product-btn" data-value="2T Manual">2T Manual</button>
+          <button type="button" class="product-btn" data-value="Machine Service">Machine Service</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Outlet/Customer Name *</label>
+        <input type="text" id="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="address">Search Address *</label>
+        <gmp-place-autocomplete id="place-autocomplete" placeholder="Start typing address..."></gmp-place-autocomplete>
+      </div>
+
+    <!-- Salesperson Dropdown -->
+      <div class="form-group">
+        <label for="salesperson">Sales Person *</label>
+        <select id="salesperson" required>
+          <option value="" disabled selected>Select Sales Person</option>
+          <option value="Mr. Monish">Mr. Monish</option>
+          <option value="Mr. Anandhan">Mr. Anandhan</option>
+          <option value="Mr. Subash">Mr. Subash</option>
+          <option value="Mr. Rajesh">Mr. Rajesh</option>
+          <option value="Mr. Dinesh">Mr. Dinesh</option>
+          <option value="Mr. Manikandan">Mr. Manikandan</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message / Requirement</label>
+        <textarea id="message"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email">
+      </div>
+      <button type="submit" id="submitBtn" class="submit-btn">Submit Enquiry</button>
+    </form>
+    <div id="statusMsg" class="status-msg"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwCjvJlFu9eovCY2l2e6cGjziS42ZSgDsIWCkjYKHy4DNDx_gRonX-8BdhpX4YiInYAg/exec';
+    let selectedAddress = '';
+    let selectedDealer = '';
+    let selectedProducts = new Set(); // Stores multiple selected products
+
+    // Handle Dealer Button Selection
+    const dealerButtons = document.querySelectorAll('.dealer-btn');
+    dealerButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        dealerButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedDealer = btn.getAttribute('data-value');
+      });
+    });
+
+// Product Multi-Selection Toggle
+    const productButtons = document.querySelectorAll('.product-btn');
+    productButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-value');
+        if (selectedProducts.has(val)) {
+          selectedProducts.delete(val);
+          btn.classList.remove('active');
+        } else {
+          selectedProducts.add(val);
+          btn.classList.add('active');
+        }
+      });
+    });
+
+    async function init() {
+      // Load modern Places library
+      const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
+      const autocomplete = document.getElementById("place-autocomplete");
+
+      // Store address when user clicks a suggestion
+      autocomplete.addEventListener("gmp-placeselect", async ({ place }) => {
+        await place.fetchFields({ fields: ["formattedAddress"] });
+        selectedAddress = place.formattedAddress || "";
+      });
+    }
+
+    init();
+
+    const form = document.getElementById('enquiryForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMsg = document.getElementById('statusMsg');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      if (!selectedDealer) {
+        alert("Please select a dealer (IOCL, BPCL, HPCL, or MRPL).");
+        return;
+      }
+
+      if (selectedProducts.size === 0) {
+        alert("Please select at least one product.");
+        return;
+      }
+
+      const autocomplete = document.getElementById("place-autocomplete");
+      
+      // Access value directly from component property or query inside Shadow Root
+      let finalAddress = selectedAddress;
+      
+      if (!finalAddress) {
+        if (autocomplete.value) {
+          finalAddress = typeof autocomplete.value === 'string' 
+            ? autocomplete.value 
+            : (autocomplete.value.formattedAddress || autocomplete.value.displayName || '');
+        } else if (autocomplete.shadowRoot) {
+          const shadowInput = autocomplete.shadowRoot.querySelector("input");
+          if (shadowInput) finalAddress = shadowInput.value;
+        }
+      }
+      // const finalAddress = selectedAddress || (typeof typedValue === 'string' ? typedValue : typedValue.formattedAddress || "");
+
+      if (!finalAddress.trim()) {
+        alert("Please select or enter a valid address.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Submitting...';
+      statusMsg.innerText = '';
+
+      const formData = {
+        dealer: selectedDealer,
+        products: Array.from(selectedProducts).join(', '), // Joins array into comma-separated string
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: finalAddress,
+        salesperson: document.getElementById('salesperson').value,
+        message: document.getElementById('message').value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(formData)
+      })
+      .then(() => {
+        statusMsg.className = 'status-msg success';
+        statusMsg.innerText = 'Thank you! Your enquiry has been submitted successfully.';
+        form.reset();
+        dealerButtons.forEach(b => b.classList.remove('active'));
+        productButtons.forEach(b => b.classList.remove('active'));
+        selectedDealer = '';
+        selectedProducts.clear();
+        selectedAddress = '';
+      })
+      .catch(error => {
+        statusMsg.className = 'status-msg error';
+        statusMsg.innerText = 'Something went wrong. Please try again.';
+        console.error('Error!', error.message);
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Submit Enquiry';
+      });
+    });
+  </script>
+
+</body>
+</html>
