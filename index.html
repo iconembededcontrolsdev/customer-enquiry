@@ -20,8 +20,20 @@
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       width: 100%;
-      max-width: 450px;
+      max-width: 500px;
+      /*position: relative; /* Essential for top-right positioning */*/
     }
+
+    /* Company Logo Styling */
+    .company-logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      max-width: 120px;  /* Adjust width as needed */
+      height: auto;
+      object-fit: contain;
+    }
+
     h2 {
       margin-bottom: 20px;
       color: #333;
@@ -144,6 +156,7 @@
 <body>
 
   <div class="form-container">
+    <img src="IEC LOGO REGISTERED TRANS BIG.png" alt="Icon Embedded Controls Logo" class="company-logo">
     <h2>ICON EMBEDED CONTROLS</h2>
     <h4>Customer Enquiry</h4>
     <form id="enquiryForm">
@@ -181,7 +194,14 @@
 
       <div class="form-group">
         <label for="phone">Phone Number *</label>
-        <input type="tel" id="phone" required>
+        <input 
+        type="tel" 
+        id="phone" 
+        placeholder="10-digit mobile number" 
+        maxlength="10" 
+        pattern="[0-9]{10}" 
+        inputmode="numeric" 
+        required>
       </div>
       
       <div class="form-group">
