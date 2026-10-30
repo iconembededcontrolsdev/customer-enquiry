@@ -6,7 +6,7 @@
   <title>Customer Enquiry Form</title>
   <style>
     body {
-      font-family: Serpentine Medium, sans-serif; 
+      font-family: Serpentine Medium, sans-serif;
       background-color: #faf7f7;
       display: flex;
       justify-content: center;
@@ -21,19 +21,16 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 500px;
-      /*position: relative; /* Essential for top-right positioning */*/
     }
-
     /* Company Logo Styling */
     .company-logo {
       position: absolute;
       top: 20px;
       right: 20px;
-      max-width: 100px;  /* Adjust width as needed */
+      max-width: 100px;
       height: auto;
       object-fit: contain;
     }
-
     h2 {
       margin-bottom: 20px;
       color: #333;
@@ -47,7 +44,7 @@
       color: #666;
       font-size: 14px;
     }
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -61,7 +58,7 @@
     }
 
     /* Dealer Button Styles */
-    .dealer-options {
+    .dealer-options, .urgency-options {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -87,6 +84,43 @@
       background-color: #007bff;
       color: #ffffff;
       border-color: #0056b3;
+    }
+
+    /* Urgency Button Styles */
+    .urgency-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      color: #495057;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .urgency-btn:hover {
+      opacity: 0.85;
+    }
+    /* Hot Lead */
+    .urgency-btn[data-value="Hot"].active {
+      background-color: #dc3545;
+      color: #ffffff;
+      border-color: #bd2130;
+    }
+    /* Warm Lead */
+    .urgency-btn[data-value="Warm"].active {
+      background-color: #fd7e14;
+      color: #ffffff;
+      border-color: #e06300;
+    }
+    /* Cold Lead */
+    .urgency-btn[data-value="Cold"].active {
+      background-color: #17a2b8;
+      color: #ffffff;
+      border-color: #117a8b;
     }
 
     /* Product Button Styles (Multi Select) */
@@ -116,11 +150,10 @@
       font-weight: bold;
     }
 
-    /* Style for the new Web Component */
+    /* Web Component Style */
     gmp-place-autocomplete {
       width: 100%;
     }
-
     .submit-btn {
       width: 100%;
       padding: 12px;
@@ -148,20 +181,18 @@
   <!-- Google Maps Bootstrap Dynamic Loader -->
   <script>
     (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-      key: "AIzaSyDSu0H5bi4KRdLv6_OfwtwbwPL1TIjuK_k", // Replace with your key
+      key: "AIzaSyDSu0H5bi4KRdLv6_OfwtwbwPL1TIjuK_k",
       v: "weekly"
     });
   </script>
 </head>
 <body>
-
   <div class="form-container">
     <img src="IEC LOGO REGISTERED TRANS BIG.png" alt="Icon Embedded Controls Logo" class="company-logo">
     <h2>ICON EMBEDED CONTROLS</h2>
     <h4>Customer Enquiry</h4>
     <form id="enquiryForm">
-
-<!-- Dealer Selection Buttons -->
+      <!-- Dealer Selection Buttons -->
       <div class="form-group">
         <label>Select Dealer *</label>
         <div class="dealer-options">
@@ -194,22 +225,15 @@
 
       <div class="form-group">
         <label for="phone">Phone Number *</label>
-        <input 
-        type="tel" 
-        id="phone" 
-        placeholder="10-digit mobile number" 
-        maxlength="10" 
-        pattern="[0-9]{10}" 
-        inputmode="numeric" 
-        required>
+        <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" required>
       </div>
-      
+
       <div class="form-group">
         <label for="address">Search Address *</label>
         <gmp-place-autocomplete id="place-autocomplete" placeholder="Start typing address..."></gmp-place-autocomplete>
       </div>
 
-    <!-- Salesperson Dropdown -->
+      <!-- Salesperson Dropdown -->
       <div class="form-group">
         <label for="salesperson">Sales Person *</label>
         <select id="salesperson" required>
@@ -223,6 +247,16 @@
         </select>
       </div>
 
+      <!-- Lead Urgency Buttons -->
+      <div class="form-group">
+        <label>Lead Urgency *</label>
+        <div class="urgency-options">
+          <button type="button" class="urgency-btn" data-value="Hot" title="Ready to buy / requested quote">Hot (Immediate)</button>
+          <button type="button" class="urgency-btn" data-value="Warm" title="Interested / needs demo at pump">Warm (Interested)</button>
+          <button type="button" class="urgency-btn" data-value="Cold" title="General inquiry">Cold (General Enquiry)</button>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="message">Message / Requirement</label>
         <textarea id="message"></textarea>
@@ -232,6 +266,7 @@
         <label for="email">Email Address</label>
         <input type="email" id="email">
       </div>
+
       <button type="submit" id="submitBtn" class="submit-btn">Submit Enquiry</button>
     </form>
     <div id="statusMsg" class="status-msg"></div>
@@ -241,7 +276,8 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwCjvJlFu9eovCY2l2e6cGjziS42ZSgDsIWCkjYKHy4DNDx_gRonX-8BdhpX4YiInYAg/exec';
     let selectedAddress = '';
     let selectedDealer = '';
-    let selectedProducts = new Set(); // Stores multiple selected products
+    let selectedUrgency = '';
+    let selectedProducts = new Set();
 
     // Handle Dealer Button Selection
     const dealerButtons = document.querySelectorAll('.dealer-btn');
@@ -253,7 +289,17 @@
       });
     });
 
-// Product Multi-Selection Toggle
+    // Handle Urgency Button Selection
+    const urgencyButtons = document.querySelectorAll('.urgency-btn');
+    urgencyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        urgencyButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedUrgency = btn.getAttribute('data-value');
+      });
+    });
+
+    // Product Multi-Selection Toggle
     const productButtons = document.querySelectorAll('.product-btn');
     productButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -269,17 +315,14 @@
     });
 
     async function init() {
-      // Load modern Places library
       const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
       const autocomplete = document.getElementById("place-autocomplete");
 
-      // Store address when user clicks a suggestion
       autocomplete.addEventListener("gmp-placeselect", async ({ place }) => {
         await place.fetchFields({ fields: ["formattedAddress"] });
         selectedAddress = place.formattedAddress || "";
       });
     }
-
     init();
 
     const form = document.getElementById('enquiryForm');
@@ -293,28 +336,25 @@
         alert("Please select a dealer (IOCL, BPCL, HPCL, or MRPL).");
         return;
       }
-
+      if (!selectedUrgency) {
+        alert("Please select Lead Urgency (Hot, Warm, or Cold).");
+        return;
+      }
       if (selectedProducts.size === 0) {
         alert("Please select at least one product.");
         return;
       }
 
       const autocomplete = document.getElementById("place-autocomplete");
-      
-      // Access value directly from component property or query inside Shadow Root
       let finalAddress = selectedAddress;
-      
       if (!finalAddress) {
         if (autocomplete.value) {
-          finalAddress = typeof autocomplete.value === 'string' 
-            ? autocomplete.value 
-            : (autocomplete.value.formattedAddress || autocomplete.value.displayName || '');
+          finalAddress = typeof autocomplete.value === 'string' ? autocomplete.value : (autocomplete.value.formattedAddress || autocomplete.value.displayName || '');
         } else if (autocomplete.shadowRoot) {
           const shadowInput = autocomplete.shadowRoot.querySelector("input");
           if (shadowInput) finalAddress = shadowInput.value;
         }
       }
-      // const finalAddress = selectedAddress || (typeof typedValue === 'string' ? typedValue : typedValue.formattedAddress || "");
 
       if (!finalAddress.trim()) {
         alert("Please select or enter a valid address.");
@@ -327,7 +367,8 @@
 
       const formData = {
         dealer: selectedDealer,
-        products: Array.from(selectedProducts).join(', '), // Joins array into comma-separated string
+        urgency: selectedUrgency,
+        products: Array.from(selectedProducts).join(', '),
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
@@ -347,8 +388,10 @@
         statusMsg.innerText = 'Thank you! Your enquiry has been submitted successfully.';
         form.reset();
         dealerButtons.forEach(b => b.classList.remove('active'));
+        urgencyButtons.forEach(b => b.classList.remove('active'));
         productButtons.forEach(b => b.classList.remove('active'));
         selectedDealer = '';
+        selectedUrgency = '';
         selectedProducts.clear();
         selectedAddress = '';
       })
@@ -363,6 +406,5 @@
       });
     });
   </script>
-
 </body>
 </html>
